@@ -17,14 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from translator.views import index
-from translator.views import FrenchSpanishTranslationViewSet
-from translator.views import FrenchEnglishTranslationViewSet
 from translator.views import AllTranslationsViewSet
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Polyteacher API",
+        default_version='v1',
+        description="API for Polyteacher project",
+        terms_of_service="https://www.Polyteacher.com/",
+    ),
+    public=True,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
+    path('', index, name='index'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('api/all_translation/', AllTranslationsViewSet.as_view(), name='all_translation'),
-    path('api/french_spanish_translator/', FrenchSpanishTranslationViewSet.as_view(), name='french_spanish_translator'),
-    path('api/french_english_translator/', FrenchEnglishTranslationViewSet.as_view(), name='french_english_translator'),
 ]
